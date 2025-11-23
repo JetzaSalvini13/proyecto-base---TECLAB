@@ -73,18 +73,6 @@ const productos = [
         precio: 700
     },
     {
-        id: 11,
-        imagen: "🥭",
-        nombre: "Mango",
-        precio: 290
-    },
-    {
-        id: 12,
-        imagen: "🍇",
-        nombre: "Uvas",
-        precio: 700
-    },
-    {
         id: 13,
         imagen: "🍐",
         nombre: "Peras",

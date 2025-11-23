@@ -2,56 +2,470 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Venta de Frutas</title>
-    <link rel="icon" href="images/icon-fruits-64.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-   <!--<script src="./js/productos.js"></script>-->
-    <script  defer src="./js/index.js"></script>
-    <script src="./js/carrito.js"></script>
+    <title>Ventadefrutas.com - Tu tienda saludable, dulce, y natural</title>
+    <link rel="icon" href="images/icon-fruits-64.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        nav {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        nav ul li {
+            position: relative;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .carrito-link {
+            position: relative;
+        }
+
+        .contador-carrito {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .contador-carrito.visible {
+            display: flex;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(76, 175, 80, 0.7), rgba(76, 175, 80, 0.7)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23e8f5e9" width="1200" height="600"/><circle cx="200" cy="150" r="80" fill="%234CAF50" opacity="0.1"/><circle cx="800" cy="400" r="100" fill="%238BC34A" opacity="0.1"/><circle cx="1000" cy="200" r="60" fill="%23CDDC39" opacity="0.1"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .btn {
+            background: white;
+            color: #4CAF50;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f1f1f1;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 4rem 2rem;
+            background: #f9f9f9;
+        }
+
+        .products h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .product-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-card h3 {
+            color: #4CAF50;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .product-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .btn-add-cart {
+            background: #4CAF50;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-add-cart:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-add-cart:active {
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #4CAF50;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            nav ul li a {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="btn-checkout">
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="#inicio">🏠 Inicio</a></li>
+            <li class="carrito-link">
             <a href="checkout.html">
-                <img src="images/icon-fruits-64.png" title="Carrito" alt="Carrito">
-                <span class="contador-carrito" style="display: none;">0</span>
-            </a>
+                    🛒 Carrito
+                    <span class="contador-carrito" id="contadorCarrito">0</span>
+                </a>
+            </li>
+            <li><a href="#formas-pago">💳 Formas de Pago</a></li>
+            <li><a href="#delivery">🚚 Delivery</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <h1>🍎 Bienvenidos a Ventadefrutas.com 🍊</h1>
+        <p>Las frutas y verduras más frescas directamente a tu puerta</p>
+        <button id="btnVerProductos" class="btn">Ver Productos</button>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="productos">
+        <h2>Nuestros Productos Frescos</h2>
+        <div class="product-grid" id="productGrid">
+            <!-- Los productos se cargarán dinámicamente aquí -->
         </div>
-        <h1>Ventadefrutas.com</h1>
-        <p>Tu tienda saludable, dulce, y natural.</p>
-        <hr>
-    </header>
-    <main>
-        <div class="container">
-            <!-- Aquí va todo lo dinámico -->
+    </section>
 
-            <!---<div class="card">
-                <div class="card-image">🍒</div>
-                <div class="card-name">Cerezas</div>
-                <div class="card-price">$ 1100</div>
-                <div class="card-button">
-                    <button class="button button-outline button-add" id="" title="Clic para agregar al carrito">+</button>
-                </div>
-            </div> -->
-
-            <div class="card-error ocultar">
-                <h2>Houston, tenemos un problema 🧨</h2>
-                <h3>No pudimos cargar los productos. 🤦🏻‍♂️</h3>
-                <h3>Intenta nuevamente en unos instantes...</h3>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sobre Nosotros</h3>
+                <p>Somos tu tienda de confianza para frutas y verduras frescas. Calidad garantizada en cada producto.</p>
             </div>
 
+            <div class="footer-section" id="formas-pago">
+                <h3>Formas de Pago</h3>
+                <ul>
+                    <li>💳 Tarjetas de Crédito</li>
+                    <li>💵 Efectivo</li>
+                    <li>📱 Transferencia Bancaria</li>
+                    <li>🔄 Mercado Pago</li>
+                </ul>
+                </div>
+
+            <div class="footer-section" id="delivery">
+                <h3>Delivery</h3>
+                <ul>
+                    <li>🚚 Envíos a todo el país</li>
+                    <li>⏰ Entregas en 24-48hs</li>
+                    <li>📦 Envío gratis desde $5000</li>
+                    <li>✅ Productos frescos garantizados</li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <ul>
+                    <li>📧 info@ventadefrutas.com</li>
+                    <li>📞 (351) 123-4567</li>
+                    <li>📍 Córdoba, Argentina</li>
+                </ul>
+            </div>
         </div>
-    </main>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Ventadefrutas.com. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/productos.js"></script>
+    <script src="js/carrito.js"></script>
+    <script>
+        const URL = "js/productos.json";
+        const productGrid = document.getElementById('productGrid');
+        const contadorCarrito = document.getElementById('contadorCarrito');
+        const btnVerProductos = document.getElementById('btnVerProductos');
+
+        if (btnVerProductos) {
+            btnVerProductos.addEventListener('click', () => {
+                window.location.href = 'productos.html';
+            });
+        }
+
+        // Función para crear una tarjeta de producto
+        const crearTarjetaProducto = (producto) => {
+            return `
+                <div class="product-card">
+                    <div class="product-icon">${producto.imagen}</div>
+                    <h3>${producto.nombre}</h3>
+                    <p>Fresco y delicioso</p>
+                    <div class="price">$${producto.precio}</div>
+                    <button class="btn-add-cart" onclick="agregarProductoAlCarrito(${producto.id})">
+                        Agregar al Carrito
+                    </button>
+                </div>
+            `;
+        };
+
+        // Función para agregar producto al carrito (wrapper para usar productos del array)
+        const agregarProductoAlCarrito = (productoId) => {
+            const productoEncontrado = productos.find((producto) => producto.id === parseInt(productoId));
+            if (productoEncontrado !== undefined) {
+                agregarAlCarrito(productoId);
+                // Actualizar contador después de que se agregue el producto
+                setTimeout(() => {
+                    actualizarContadorCarrito();
+                    // También actualizar usando la función de carrito.js si existe
+                    if (typeof window.actualizarContadorCarrito === 'function') {
+                        window.actualizarContadorCarrito();
+                    }
+                }, 100);
+            }
+        };
+
+        // Función para cargar productos
+        const cargarProductos = () => {
+            fetch(URL)
+                .then((response) => response.json())
+                .then((data) => {
+                    // Eliminar duplicados por ID
+                    const productosUnicos = [];
+                    const idsVistos = new Set();
+                    
+                    data.forEach(producto => {
+                        if (!idsVistos.has(producto.id)) {
+                            idsVistos.add(producto.id);
+                            productosUnicos.push(producto);
+                        }
+                    });
+
+                    productosUnicos.forEach(producto => {
+                        productGrid.innerHTML += crearTarjetaProducto(producto);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error al cargar productos:', error);
+                    productGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                            <h3 style="color: #d32f2f;">Houston, tenemos un problema 🧨</h3>
+                            <p>No pudimos cargar los productos. Intenta nuevamente en unos instantes...</p>
+                        </div>
+                    `;
+                });
+        };
+
+        // Función para actualizar el contador del carrito en el home
+        const actualizarContadorHome = () => {
+            const carrito = recuperarCarrito();
+            if (carrito.length > 0) {
+                contadorCarrito.textContent = carrito.length;
+                contadorCarrito.style.display = 'flex';
+                contadorCarrito.classList.add('visible');
+            } else {
+                contadorCarrito.style.display = 'none';
+                contadorCarrito.classList.remove('visible');
+            }
+        };
+
+        // Sobrescribir la función actualizarContadorCarrito de carrito.js para que funcione con el nuevo diseño
+        const originalActualizarContadorCarrito = window.actualizarContadorCarrito;
+        window.actualizarContadorCarrito = function() {
+            // Llamar a la función original si existe
+            if (typeof originalActualizarContadorCarrito === 'function') {
+                originalActualizarContadorCarrito();
+            }
+            // Actualizar nuestro contador personalizado
+            actualizarContadorHome();
+        };
+
+        // Cargar productos y actualizar contador al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarProductos();
+            actualizarContadorHome();
+        });
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos - Ventadefrutas.com</title>
+    <link rel="icon" href="images/icon-fruits-64.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="./js/productos.js"></script>
+    <script defer src="./js/index.js"></script>
+    <script src="./js/carrito.js"></script>
+    <style>
+        body {
+            background: #f9f9f9;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem 1rem 1rem;
+        }
+
+        header h1 {
+            color: #4CAF50;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            margin-top: 1rem;
+        }
+
+        .footer-productos {
+            background: #ffffff;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: 3rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .footer-productos p {
+            margin-bottom: 1rem;
+            color: #4a4a4a;
+            font-weight: 500;
+        }
+
+        .acciones-productos {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .acciones-productos .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .contador-carrito-badge {
+            background-color: #ff4444;
+            color: #fff;
+            border-radius: 999px;
+            padding: 0.2rem 0.65rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: none;
+        }
+
+        .contador-carrito-badge.visible {
+            display: inline-flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ventadefrutas.com</h1>
+        <p>Tu tienda saludable, dulce, y natural.</p>
+        <hr>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Aquí se cargarán los productos dinámicamente -->
+
+            <div class="card-error ocultar">
+                <h2>Houston, tenemos un problema 🧨</h2>
+                <h3>No pudimos cargar los productos. 🤦🏻‍♂️</h3>
+                <h3>Intenta nuevamente en unos instantes...</h3>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-productos">
+        <p>¿Deseás volver a la portada o revisar tu carrito?</p>
+        <div class="acciones-productos">
+            <a href="index.html" class="button button-outline">← Volver al inicio</a>
+            <a href="checkout.html" class="button button-primary">
+                🛒 Ver carrito y pagar
+                <span id="contadorCarritoFooter" class="contador-carrito-badge">0</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        const contadorCarritoFooter = document.getElementById('contadorCarritoFooter');
+
+        const actualizarContadorFooter = () => {
+            if (!contadorCarritoFooter) return;
+            const carrito = recuperarCarrito();
+            if (carrito.length > 0) {
+                contadorCarritoFooter.textContent = carrito.length;
+                contadorCarritoFooter.classList.add('visible');
+            } else {
+                contadorCarritoFooter.classList.remove('visible');
+                contadorCarritoFooter.textContent = 0;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                actualizarContadorFooter();
+                const originalActualizar = window.actualizarContadorCarrito;
+                window.actualizarContadorCarrito = function() {
+                    if (typeof originalActualizar === 'function') {
+                        originalActualizar();
+                    }
+                    actualizarContadorFooter();
+                };
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+
